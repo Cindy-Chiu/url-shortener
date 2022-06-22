@@ -27,7 +27,10 @@ db.once('open', () => {
   console.log('mongodb connected!')
 })
 
-let newId = restaurantList.results.length + 1 //預設第一家新增餐廳的id為種子資料的長度+1
+
+let nowTime = new Date()
+let newId = Number(nowTime.getFullYear().toString() + nowTime.getMonth().toString() + nowTime.getDate().toString() + nowTime.getHours().toString() + nowTime.getMinutes().toString()) //取當前時間資料作為id基值，可避免每次啟動伺服器並新增餐廳時給予重複的id
+
 
 
 // routes setting
@@ -46,19 +49,10 @@ app.get('/restaurants/new', (req, res) => {
 })
 
 app.post('/restaurants', (req, res) => {
-
-  const reqData = req.body
+  const { name, name_en, category, image, location, phone, google_map, rating, description } = req.body
   const id = newId
-  const name = reqData.name
-  const name_en = reqData.name_en
-  const category = reqData.category
-  const image = reqData.image
-  const location = reqData.location
-  const phone = reqData.phone
-  const google_map = reqData.google_map
-  const rating = reqData.rating
-  const description = reqData.description
   newId = newId + 1
+ 
 
   return Restaurant.create({ id, name, name_en, category, image, location, phone, google_map, rating, description }) // 存入資料庫
     .then(() => res.redirect('/')) // 新增完成後導回首頁
