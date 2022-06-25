@@ -1,7 +1,7 @@
 // 引用 Express 與 Express 路由器
 const express = require('express')
 const router = express.Router()
-// 引用 Todo model
+// 引用 Restaurant model
 const Restaurant = require('../../models/restaurant')
 // 定義首頁路由
 router.get('/', (req, res) => {
