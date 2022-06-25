@@ -1,13 +1,7 @@
-const mongoose = require('mongoose')
-const Restaurant = require('../restaurant') // 載入 restaurant model
+const Restaurant = require('../restaurant')
+const db = require('../../config/mongoose')
 const Seeder = require('../restaurant.json')
 const seederData = Seeder.results
-
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-const db = mongoose.connection
-db.on('error', () => {
-  console.log('mongodb error!')
-})
 db.once('open', () => {
   console.log('mongodb connected!')
   for (let i = 0; i < seederData.length; i++) {

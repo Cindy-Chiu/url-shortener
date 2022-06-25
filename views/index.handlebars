@@ -1,5 +1,10 @@
 <!-- ./views/index.handlebars -->
 <div class="container mt-5">
+  <div class="addButton">
+    <a href="./restaurants/new">
+      <button type="button" class="btn btn-dark" style="margin-right: 100px;">新增餐廳</button>
+    </a>
+  </div>
   <!-- search bar -->
   <div class="container search-bar">
     <div class="search-bar-outer">
@@ -7,14 +12,33 @@
         <form action="/search">
           <h4 class="mb-2">尋找餐廳：</h4>
           <div class="input-group">
-            <input type="text" name="keyword" class="form-control" placeholder="輸入餐廳、分類" aria-label="Restaurant Name..."
+            <input type="text" name="keyword" class="form-control bar" placeholder="輸入餐廳名稱或分類" aria-label="Restaurant Name..."
               value="{{keyword}}" aria-describedby="search-button">
             <div class="input-group-append">
               <button class="btn btn-major" type="submit" id="search-button"><i class="fas fa-search"></i></button>
             </div>
+              <div class="dropdown ml-3">
+                <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="collapse" data-bs-target="#collapseExample" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                  {{#is sorting 'name'}}A->Z{{/is}}
+                  {{#is sorting '-name'}}Z->A{{/is}}
+                  {{#is sorting 'category'}}依餐廳分類{{/is}}
+                  {{#is sorting 'location'}}依地區{{/is}}
+                  {{#is sorting 'rating'}}評分由低到高{{/is}}
+                  {{#is sorting '-rating'}}評分由高到低{{/is}}
+                  {{#unless sorting}}選擇排序{{/unless}}
+                </button>
+                <div class="dropdown-menu" id="collapseExample" aria-labelledby="dropdownMenuButton">
+                  <button class="btn btn-light" type="submit" name="sorting" value="name">A->Z</button>
+                  <button class="btn btn-light" type="submit" name="sorting" value="-name">Z->A</button>
+                  <button class="btn btn-light" type="submit" name="sorting" value="category">依餐廳分類</button>
+                  <button class="btn btn-light" type="submit" name="sorting" value="location">依地區</button>
+                  <button class="btn btn-light" type="submit" name="sorting" value="rating">評分由低到高</button>
+                  <button class="btn btn-light" type="submit" name="sorting" value="-rating">評分由高到低</button>
+                </div>
+              </div>
           </div>
         </form>
-        <a href="./restaurants/new"><i class="fa fa-plus mt-3" style="border-radius:8px; cursor: pointer; color:black"> 新增餐廳</i></a>
       </div>
     </div>
   </div>
@@ -22,10 +46,10 @@
   <div class="container mt-5">
     <div class="row">
       <div class="col-md-10 col-12 mx-auto">
-        <div class="card-columns">
+        <div class="card-rows"style="display:flex;flex-wrap:wrap;">
           {{#each restaurants}}
           <a href="/restaurants/{{this.id}}" class="text-secondary">
-            <div class="card mb-3 mo">
+            <div class="card m-3" >
               <img class="card-img-top" src="{{this.image}}" alt="{{this.name}}">
               <div class="card-body p-3">
                 <h6 class="card-title mb-1">{{this.name}}</h6>
@@ -38,19 +62,19 @@
                   {{this.rating}}
                   <i class="fas fa-star fa-xs"></i>
                 </span>
-                
+
               </div>
               <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
-                <a href="/restaurants/{{ this.id }}/edit" style="margin-right:10px;color:black">編輯資訊</a>
-                <a href="/restaurants/{{ this.id }}" style="margin-right:10px;color:black">詳細資訊</a>
-                <form action="/restaurants/{{ this.id }}/delete" method="POST" style="display: inline;">
-                  <button type="submit" style="border:0; background-color:white">刪除此餐廳</button>
+                <a href="/restaurants/{{ this.id }}/edit" style="margin-right:10px;color:black">編輯</a>
+                <a href="/restaurants/{{ this.id }}" style="margin-right:10px;color:black">瀏覽</a>
+                <form action="/restaurants/{{ this.id }}?_method=DELETE" method="POST" style="display: inline;">
+                  <button type="submit" style="border:0; background-color:white; color:red" onclick="deleteConfirm()">刪除</button>
                 </form>
               </div>
             </div>
-           
+
           </a>
-        
+
           {{/each}}
         </div>
       </div>

@@ -39,11 +39,11 @@
         style="max-width: 600px;">
     </div>
   </div>
-  <div style="display: flex; justify-content: center; margin-bottom: 5px">
-    <a href="/restaurants/{{ restaurant.id }}/edit" style="margin-right:10px">編輯資訊</a>
-    <form action="/restaurants/{{ restaurant.id }}/delete" method="POST" style="display: inline;">
-      <button type="submit" style="border:0;">刪除此餐廳</button>
-      <a href="/">返回首頁</a>
+  <div class="form-group" style="display: flex; justify-content: center; margin-bottom: 5px">
+    <a class="btn btn-primary" href="/restaurants/{{ restaurant.id }}/edit" style="margin-right: 5px">編輯資訊</a>
+    <form action="/restaurants/{{ restaurant.id }}?_method=DELETE" method="POST" style="display: inline;">
+      <button type="submit" class="btn btn-danger" style="margin-right: 5px" onclick="deleteConfirm()">刪除此餐廳</button>
     </form>
+    <a class="btn btn-primary" href="/" style="margin-right: 5px">返回首頁</a>
   </div>
 </div>
