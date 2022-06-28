@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cindy's Restaurant List</title>
+  <title>Cindy's URL Shortener</title>
   <link rel="stylesheet" href="/stylesheets/bootstrap.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.1/css/all.min.css">
@@ -13,18 +13,16 @@
 </head>
 
 <body>
-  <!-- navigation -->
-  <nav class="navbar navbar-light bg-light">
-    <div class="container">
-      <a class="navbar-brand" href="/">
-        <img src="https://assets-lighthouse.s3.amazonaws.com/uploads/image/file/6227/restaurant-list-logo.png"
-          width="30" height="30" class="d-inline-block align-top" alt="Cindy的餐廳清單">
-        Cindy的餐廳清單
-      </a>
+  <!-- banner -->
+  <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img class="d-block w-100 urlImage"
+          src="https://assets-lighthouse.alphacamp.co/uploads/image/file/16716/ExportedContentImage_00.png"
+          alt="URL Shortener" style="height: 200px; max-width: 200px;">
+      </div>
     </div>
-  </nav>
-
-  <div class="banner"></div>
+  </div>
 
   <!-- partial templates will replace the part of "body" here -->
   {{{ body }}}
@@ -32,15 +30,18 @@
   <script src="/javascripts/popper.js"></script>
   <script src="/javascripts/bootstrap.js"></script>
   <script>
-    function deleteConfirm() {
-        let text = "確認要刪除此餐廳？";
-        if (confirm(text) == true) {
-          return true
-        } else {
-          event.preventDefault()
-          event.stopPropagation()
-        }
-      }
+    function copyToClickBoard() {
+      const content = document.getElementById('textArea').innerHTML;
+
+      navigator.clipboard.writeText(content)
+        .then(() => {
+          alert('URL Copied!')
+        })
+        .catch(err => {
+          console.log('Something went wrong', err);
+        })
+
+    }
   </script>
 </body>
 

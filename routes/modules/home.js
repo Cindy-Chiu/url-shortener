@@ -1,30 +1,46 @@
 // 引用 Express 與 Express 路由器
 const express = require('express')
 const router = express.Router()
-// 引用 Restaurant model
-const Restaurant = require('../../models/restaurant')
+const URL = require('../../models/url')
+const generateCode = require('../../models/generateCode')
+const checkOriginal = require('../../models/checkOriginal')
+
 // 定義首頁路由
 router.get('/', (req, res) => {
+  res.render('index')
+})
 
-  Restaurant.find()
+//若輸入了縮短後的網址，則從資料庫撈出原網址並導過去
+router.get('/:shortenedURL', (req, res) => { 
+  const shortenedURL = req.params.shortenedURL
+  URL.findOne({ shortenedURL })
     .lean()
-    .then(restaurants => {
-      res.render('index', { restaurants })
+    .then((target) => {
+      res.redirect(target.original)
     })
-    .catch(error => console.log(error))
 })
 
-//定義搜尋路由
-router.get('/search', (req, res) => {
-  const {keyword, sorting} = req.query
-  const regex = new RegExp(keyword, 'i') // i for case insensitive
-  return Restaurant.find({ $or: [{ name: { $regex: regex } }, { category: { $regex: regex } }, { name_en: { $regex: regex } }] })
-    .lean() //用關鍵字搜尋餐廳時可以輸入名稱、英文名稱、餐廳分類來搜尋並且不分字母大小寫
-    .sort(sorting)
-    .then((restaurants) => res.render('index', { restaurants, keyword, sorting}))
-    .catch(error => console.log(error))
-})
+//定義輸入網址後的路由
+router.post('/', async (req, res) => {
+  const original = req.body.original.trim()
+  const shortenedURL = await generateCode(5)
+  console.log(shortenedURL)
+  if (await checkOriginal(original)) { //若輸入的網址已有一組縮短後的網址，則顯示原縮短後的網址不另外新增資料進資料庫
+    URL.findOne({ original })
+      .lean()
+      .then((target) => {
+        console.log(target.shortenedURL)
+        const shortenedURL = target.shortenedURL
+        res.render('show', { original, shortenedURL })
+      })
+      .catch(error => console.log(error))
+  } else {
+    return URL.create({ original, shortenedURL }) // 存入資料庫
+      .then(() => res.render('show', { original, shortenedURL })) // 顯示縮短後的網址
+      .catch(error => console.log(error))
+  }
 
+})
 
 // 匯出路由模組
 module.exports = router
