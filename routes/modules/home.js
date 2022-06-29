@@ -18,6 +18,7 @@ router.get('/:shortenedURL', (req, res) => {
     .then((target) => {
       res.redirect(target.original)
     })
+    .catch(()=>{res.redirect('/');})
 })
 
 //定義輸入網址後的路由
