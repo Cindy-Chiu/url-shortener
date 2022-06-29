@@ -2,10 +2,7 @@ const URL = require('./url')
 
 
 async function generateCode(length) {
-  const lowerCaseLetters = 'abcdefghijklmnopqrstuvwxyz'
-  const upperCaseLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-  const numbers = '0123456789'
-  const letters = lowerCaseLetters + upperCaseLetters + numbers
+  const letters = 'abcdefghijkmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ23456789'
   let code = ''
 
   do { 
